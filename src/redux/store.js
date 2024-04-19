@@ -1,17 +1,36 @@
-import { createStore, combineReducers } from "redux";
-import { devToolsEnhancer } from "@redux-devtools/extension";
-import { contactsReducer } from "./contacts/contactsReduser";
+import { configureStore } from "@reduxjs/toolkit";
+import { contactsReducer } from "./contactsSlice";
 
-const rootReducer = combineReducers({
-  contacts: contactsReducer,
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { filtersReducer } from "./filtersSlice";
+
+const contactsPersistConfig = {
+  key: "contacts",
+  storage,
+  whitelist: ["contacts"],
+};
+
+export const store = configureStore({
+  reducer: {
+    contacts: persistReducer(contactsPersistConfig, contactsReducer),
+    filters: filtersReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
-const enhancer = devToolsEnhancer();
-
-export const store = createStore(rootReducer, enhancer);
-
-// У файлі store.js:
-
-// Створи конфігурацію для збереження поля items зі слайса контактів.
-// Використовуй persistReducer, щоб застосувати конфігурацію до редюсера слайса контактів.
-// Використовуй persistStore для створення persistor для PersistGate.
+export const persistor = persistStore(store);

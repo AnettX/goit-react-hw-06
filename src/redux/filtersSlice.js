@@ -1,11 +1,21 @@
-// У файлі filtersSlice.js оголоси слайс фільтра, використовуючи функцію createSlice().
+import { createSlice } from "@reduxjs/toolkit";
 
-// Екшени слайса для використання в dispatch:
+const INITIAL_STATE = {
+  filters: {
+    name: "",
+  },
+};
 
-// changeFilter - зміна значення фільтра в властивості name
+const filtersSlice = createSlice({
+  name: "filters",
+  initialState: INITIAL_STATE,
+  reducers: {
+    changeFilter(state, action) {
+      state.filters.name = action.payload;
+    },
+  },
+});
 
-// Оголоси функції-селектори для використання в useSelector:
+export const { changeFilter } = filtersSlice.actions;
 
-// selectNameFilter - повертає значення фільтра з властивості name.
-
-// З файла слайса експортуй редюсер, а також його екшени і селектори.
+export const filtersReducer = filtersSlice.reducer;

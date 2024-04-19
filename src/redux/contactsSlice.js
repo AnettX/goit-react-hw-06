@@ -1,12 +1,26 @@
-// У файлі contactsSlice.js оголоси слайс контактів, використовуючи функцію createSlice().
+import { createSlice } from "@reduxjs/toolkit";
 
-// Екшени слайса для використання в dispatch:
+const INITIAL_STATE = {
+  contacts: {
+    items: [],
+  },
+};
 
-// addContact - додавання нового контакту до властивості items
-// deleteContact - видалення контакту за id з властивості items
+const contactsSlice = createSlice({
+  name: "contacts",
+  initialState: INITIAL_STATE,
+  reducers: {
+    addContact(state, action) {
+      state.contacts.items.push(action.payload);
+    },
+    deleteContact(state, action) {
+      state.contacts.items = state.contacts.items.filter(
+        (contact) => contact.id != action.payload
+      );
+    },
+  },
+});
 
-// Оголоси функції-селектори для використання в useSelector:
+export const { addContact, deleteContact } = contactsSlice.actions;
 
-// selectContacts - повертає список контактів з властивості items.
-
-// З файла слайса експортуй редюсер, а також його екшени і селектори.
+export const contactsReducer = contactsSlice.reducer;
