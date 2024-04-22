@@ -24,7 +24,6 @@ const FORM_INITIAL_VALUES = {
 
 const ContactForm = () => {
   const dispatch = useDispatch();
-//   const contacts = useSelector((state) => state.contacts.items);
 
   const onAddContact = (formData) => {
     const finalUsers = {
